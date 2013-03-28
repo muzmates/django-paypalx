@@ -13,6 +13,8 @@ from django.shortcuts import render, redirect
 from django.utils.timezone import now
 
 import lib
+import ex
+
 from models import Transaction
 
 def return_url(req):
@@ -26,23 +28,22 @@ def return_url(req):
 
     try:
         if token is None:
-            raise Exception("Token param not specified")
+            raise ex.ResponseMissingData("token")
 
         if payer_id is None:
-            raise Exception("PayerID param not specified")
+            raise ex.ResponseMissingData("PayerID")
 
         # Try to find transaction
         tr = Transaction.objects.get(token=token)
 
         if tr.completed:
-            raise Exception("Transaction %d already completed: %s",
-                            tr.id, tr.date_completed)
+            raise ex.TransactionIsCompleted(tr)
 
         # Obtain transaction details from paypal
         result = lib.get_transaction_details(token)
 
         if result.get("ACK") != "Success":
-            raise Exception("Response ACK is not Success: %s", str(result))
+            raise ex.ResponseNotSuccess(result)
 
         # Save addition buyer info
         tr.payer_id = payer_id
@@ -72,7 +73,7 @@ def return_url(req):
         result = lib.call_api(params)
 
         if result.get("ACK") != "Success":
-            raise Exception("Response ACK is not Success: %s", str(result))
+            raise ex.ResponseNotSuccess(result)
 
         tr.do_ec_correlation_id = result.get("CORRELATIONID", "EMPTY")
         tr.date_paid = now()
@@ -81,7 +82,7 @@ def return_url(req):
 
         return successf(req, tr)
     except Transaction.DoesNotExist:
-        e = Exception("Unable to find transaction with token %s", token)
+        e = ex.TransactionNotFound(token)
 
         return failuref(req, tr, e)
     except Exception as e:
@@ -90,6 +91,15 @@ def return_url(req):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def cancel_url(req):
-    token = req.GET.get("token", None)
+    """
+    Handle cancel URL case
+    """
 
-    return HttpResponse()
+    cb = lib.conf("PPX_CANCEL_URL_CALLBACK")
+
+    try:
+        tr = Transaction.objects.get(token=token)
+
+        return cb(req, tr)
+    except Transaction.DoesNotExist
+        return cb(req, None)

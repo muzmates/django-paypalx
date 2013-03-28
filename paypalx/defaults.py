@@ -19,6 +19,7 @@ PPX_PAYMENT_ACTION = "Sale"
 PPX_USE_SANDBOX = False
 PPX_RETURN_URL_SUCCESS_CALLBACK = lambda req, tr: HttpResponse()
 PPX_RETURN_URL_ERROR_CALLBACK = lambda req, tr, err: HttpResponseServerError()
+PPX_CANCEL_URL_CALLBACK = lambda req, tr: HttpResponse()
 
 ## Usually you don't need to override these
 PPX_ENDPOINT = "https://api-3t.paypal.com/nvp"

@@ -10,6 +10,7 @@ from django.utils.timezone import now
 
 import lib
 import models
+import ex
 
 def init(amount, description=None, currency=None):
     """
@@ -53,10 +54,10 @@ def init(amount, description=None, currency=None):
     result = lib.call_api(params)
 
     if result.get("ACK", None) != "Success":
-        raise Exception("Response ACK is not Success: %s", result)
+        raise ex.ResponseNotSuccess(result)
 
     if result.get("TOKEN", None) is None:
-        raise Exception("No TOKEN in response: %s", result)
+        raise ex.ResponseMissingData("TOKEN")
     else:
         token = result["TOKEN"]
 
