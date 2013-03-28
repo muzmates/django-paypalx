@@ -8,7 +8,6 @@ import urllib
 
 from django.conf import settings
 
-from paypalx.models import Transaction
 from paypalx import defaults
 
 __all__ = ["conf",
@@ -45,7 +44,7 @@ def get_paypal_url(token):
     else:
         base = conf("PPX_REDIRECT_URL")
 
-    return base % urllib.urlencode({"token": token})
+    return base % urllib.urlencode({"token": token, "useraction": "commit"})
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -64,3 +63,21 @@ def call_api(data):
     con.close()
 
     return dict(urlparse.parse_qsl(res))
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def get_transaction_details(token):
+    """
+    Get transaction details by token
+    """
+
+    params = {
+        "METHOD": "GetExpressCheckoutDetails",
+        "VERSION": conf("PPX_VERSION"),
+        "USER": conf("PPX_USER"),
+        "PWD": conf("PPX_PWD"),
+        "SIGNATURE": conf("PPX_SIGNATURE"),
+        "TOKEN": token
+        }
+
+    return call_api(params)

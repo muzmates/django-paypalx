@@ -29,3 +29,6 @@ PPX_USE_SANDBOX = False
 
 3. Run manage.py syncdb && manage.py migrate paypalx
 
+# Callback function
+
+function()

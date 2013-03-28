@@ -7,7 +7,6 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('paypalx.views',
-    url(r'^init/$', 'init'),
     url(r'^return/$', 'return_url'),
     url(r'^cancel/$', 'cancel_url'),
 )

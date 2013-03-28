@@ -75,3 +75,8 @@ class Transaction(models.Model):
                                             blank=True,
                                             null=True,
                                             default=None)
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def __unicode__(self):
+        return u"Transaction: %d %s" % (self.id, self.token)
