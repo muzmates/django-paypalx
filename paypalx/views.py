@@ -101,5 +101,5 @@ def cancel_url(req):
         tr = Transaction.objects.get(token=token)
 
         return cb(req, tr)
-    except Transaction.DoesNotExist
+    except Transaction.DoesNotExist:
         return cb(req, None)

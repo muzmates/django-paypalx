@@ -30,7 +30,7 @@ def get_endpoint():
     Get paypal endpoint
     """
 
-    return conf("PPX_SANDBOX_ENDPOINT") if settings.DEBUG \
+    return conf("PPX_SANDBOX_ENDPOINT") if conf("PPX_USE_SANDBOX") \
                                         else conf("PPX_ENDPOINT")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
