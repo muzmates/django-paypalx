@@ -39,7 +39,7 @@ def get_paypal_url(token):
     Get paypal redirect url
     """
 
-    if settings.DEBUG:
+    if conf("PPX_USE_SANDBOX"):
         base = conf("PPX_SANDBOX_REDIRECT_URL")
     else:
         base = conf("PPX_REDIRECT_URL")
