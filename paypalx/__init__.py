@@ -14,7 +14,7 @@ import ex
 
 def init(amount, description=None, currency=None):
     """
-    Init payment and redirect to robokassa site for checkout
+    Init payment
 
     Params:
     * amount - Amount to pay

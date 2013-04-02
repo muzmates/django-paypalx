@@ -137,7 +137,8 @@ class TestReturn(TestCase):
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    @mock.patch('paypalx.lib.get_transaction_details', lambda _: {"ACK": "Success"})
+    @mock.patch('paypalx.lib.get_transaction_details',
+                lambda _: {"ACK": "Success"})
     @mock.patch('paypalx.lib.call_api', lambda _: {"ACK": "XXX"})
     def test_not_success2(self):
         self.assertRaises(ex.ResponseNotSuccess, views.return_url,
