@@ -15,6 +15,7 @@ PPX_RETURN_URL = ""
 PPX_CANCEL_URL = ""
 PPX_PAYMENT_ACTION = "Sale"
 PPX_USE_SANDBOX = False
+PPX_SSL_CA_CERT_PATH = "/etc/ssl/certs/ca-certificates.crt"
 ```
 
 # Installation

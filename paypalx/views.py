@@ -1,15 +1,9 @@
-## encoding: utf-8
+## coding=utf-8
 ##
 ## Max E. Kuznecov <mek@mek.uz.ua>
 ## muzmates.com 2013
 ##
 
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponseServerError
-from django.http import HttpResponseNotFound
-from django.http import HttpResponse
-
-from django.shortcuts import render, redirect
 from django.utils.timezone import now
 
 import lib
@@ -68,7 +62,7 @@ def return_url(req):
             "L_PAYMENTREQUEST_0_NAME0": tr.description,
             "L_PAYMENTREQUEST_0_QTY0": 1,
             "L_PAYMENTREQUEST_0_AMT0": tr.amount,
-            }
+        }
 
         result = lib.call_api(params)
 
@@ -88,13 +82,12 @@ def return_url(req):
     except Exception as e:
         return failuref(req, tr, e)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 def cancel_url(req):
     """
     Handle cancel URL case
     """
 
+    token = req.GET.get("token", None)
     cb = lib.conf("PPX_CANCEL_URL_CALLBACK")
 
     try:

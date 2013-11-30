@@ -1,4 +1,4 @@
-## encoding: utf-8
+## coding=utf-8
 ##
 ## Max E. Kuznecov <mek@mek.uz.ua>
 ## muzmates.com 2013
@@ -20,6 +20,7 @@ PPX_USE_SANDBOX = False
 PPX_RETURN_URL_SUCCESS_CALLBACK = lambda req, tr: HttpResponse()
 PPX_RETURN_URL_ERROR_CALLBACK = lambda req, tr, err: HttpResponseServerError()
 PPX_CANCEL_URL_CALLBACK = lambda req, tr: HttpResponse()
+PPX_SSL_CA_CERT_PATH = "/etc/ssl/certs/ca-certificates.crt"
 
 ## Usually you don't need to override these
 PPX_ENDPOINT = "https://api-3t.paypal.com/nvp"

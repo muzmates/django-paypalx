@@ -1,4 +1,4 @@
-## encoding: utf-8
+## coding=utf-8
 ##
 ## Max E. Kuznecov <mek@mek.uz.ua>
 ## muzmates.com 2013
@@ -23,8 +23,6 @@ def conf(val):
 
     return getattr(settings, val, getattr(defaults, val))
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 def get_endpoint():
     """
     Get paypal endpoint
@@ -32,7 +30,6 @@ def get_endpoint():
 
     return conf("PPX_SANDBOX_ENDPOINT") if conf("PPX_USE_SANDBOX") \
                                         else conf("PPX_ENDPOINT")
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def get_paypal_url(token):
     """
@@ -46,8 +43,6 @@ def get_paypal_url(token):
 
     return base % urllib.urlencode({"token": token, "useraction": "commit"})
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 def call_api(data):
     """
     Make API call
@@ -55,16 +50,14 @@ def call_api(data):
 
     import urllib2
     import urlparse
+    from contextlib import closing
+    from https_connection import build_opener
 
-    endpoint = get_endpoint()
-    con = urllib2.urlopen(endpoint, urllib.urlencode(data))
-    res = con.read()
+    opener = build_opener()
+    req = urllib2.Request(get_endpoint(), urllib.urlencode(data))
 
-    con.close()
-
-    return dict(urlparse.parse_qsl(res))
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    with closing(opener.open(req)) as stream:
+        return dict(urlparse.parse_qsl(stream.read()))
 
 def get_transaction_details(token):
     """
@@ -78,6 +71,6 @@ def get_transaction_details(token):
         "PWD": conf("PPX_PWD"),
         "SIGNATURE": conf("PPX_SIGNATURE"),
         "TOKEN": token
-        }
+    }
 
     return call_api(params)

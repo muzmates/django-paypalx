@@ -1,4 +1,4 @@
-## encoding: utf-8
+## coding=utf-8
 ##
 ## Max E. Kuznecov <mek@mek.uz.ua>
 ## muzmates.com 2013
