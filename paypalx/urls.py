@@ -4,7 +4,7 @@
 ## muzmates.com 2013
 ##
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('paypalx.views',
     url(r'^return/$', 'return_url'),
