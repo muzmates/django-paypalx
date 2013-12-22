@@ -12,7 +12,7 @@ import lib
 import models
 import ex
 
-def init(amount, description=None, currency=None):
+def init(amount, description=None, currency=None, req=None):
     """
     Init payment
 
@@ -20,35 +20,33 @@ def init(amount, description=None, currency=None):
     * amount - Amount to pay
     * description - Transaction description
     * currency - Currency code
+    * req - Original HttpRequest instance
 
     Return paypalx.models.Transaction instance
     """
 
-    description = description or lib.conf("PPX_DEFAULT_DESCRIPTION")
-    currency = currency or lib.conf("PPX_DEFAULT_CURRENCY")
+    description = description or lib.dyn_conf("PPX_DEFAULT_DESCRIPTION", req)
+    currency = currency or lib.dyn_conf("PPX_DEFAULT_CURRENCY", req)
 
     tr = models.Transaction(amount=Decimal(amount),
                             currency=currency,
                             description=description)
 
-    return_url = lib.conf("PPX_RETURN_URL")
-    cancel_url = lib.conf("PPX_CANCEL_URL")
-
     params = {
         "METHOD": "SetExpressCheckout",
-        "VERSION": lib.conf("PPX_VERSION"),
-        "USER": lib.conf("PPX_USER"),
-        "PWD": lib.conf("PPX_PWD"),
-        "SIGNATURE": lib.conf("PPX_SIGNATURE"),
+        "VERSION": lib.dyn_conf("PPX_VERSION", req),
+        "USER": lib.dyn_conf("PPX_USER", req),
+        "PWD": lib.dyn_conf("PPX_PWD", req),
+        "SIGNATURE": lib.dyn_conf("PPX_SIGNATURE", req),
         "PAYMENTREQUEST_0_AMT": amount,
         "PAYMENTREQUEST_0_ITEMAMT": amount,
         "PAYMENTREQUEST_0_CURRENCYCODE": currency,
-        "RETURNURL": return_url,
-        "CANCELURL": cancel_url,
+        "RETURNURL": lib.dyn_conf("PPX_RETURN_URL", req),
+        "CANCELURL": lib.dyn_conf("PPX_CANCEL_URL", req),
         "L_PAYMENTREQUEST_0_NAME0": description,
         "L_PAYMENTREQUEST_0_QTY0": 1,
         "L_PAYMENTREQUEST_0_AMT0": amount,
-        "PAYMENTREQUEST_0_PAYMENTACTION": lib.conf("PPX_PAYMENT_ACTION"),
+        "PAYMENTREQUEST_0_PAYMENTACTION": lib.dyn_conf("PPX_PAYMENT_ACTION", req)
         }
 
     result = lib.call_api(params)
@@ -68,3 +66,4 @@ def init(amount, description=None, currency=None):
     tr.save()
 
     return tr
+

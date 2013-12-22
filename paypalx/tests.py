@@ -32,13 +32,9 @@ SETTINGS = {"PPX_USER": "",
 def mconf(val):
     return SETTINGS.get(val)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 class Reqx(object):
     def __init__(self, d):
         self.GET = d
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 @mock.patch('paypalx.lib.conf', mconf)
 class TestInit(TestCase):
@@ -52,25 +48,17 @@ class TestInit(TestCase):
         self.assertIsNotNone(tr.date_after_set)
         self.assertIsNotNone(tr.set_ec_correlation_id)
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     @mock.patch('paypalx.lib.call_api', lambda _: {"ACK": "ERROR"})
     def test_set_ec_not_success(self):
         self.assertRaises(ex.ResponseNotSuccess, paypalx.init, 1)
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @mock.patch('paypalx.lib.call_api', lambda _: {"ACK": "Success"})
     def test_set_ec_no_token(self):
         self.assertRaises(ex.ResponseMissingData, paypalx.init, 1)
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     def test_invalid_args(self):
         self.assertRaises(decimal.InvalidOperation,
                           paypalx.init, amount="wtf")
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 @mock.patch('paypalx.lib.conf', mconf)
 class TestReturn(TestCase):
@@ -128,14 +116,10 @@ class TestReturn(TestCase):
         self.assertRaises(ex.TransactionIsCompleted, views.return_url,
                           Reqx(self.req_data))
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     @mock.patch('paypalx.lib.get_transaction_details', lambda _: {"ACK": "X"})
     def test_not_success(self):
         self.assertRaises(ex.ResponseNotSuccess, views.return_url,
                           Reqx(self.req_data))
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @mock.patch('paypalx.lib.get_transaction_details',
                 lambda _: {"ACK": "Success"})
@@ -143,8 +127,6 @@ class TestReturn(TestCase):
     def test_not_success2(self):
         self.assertRaises(ex.ResponseNotSuccess, views.return_url,
                           Reqx(self.req_data))
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @mock.patch('paypalx.lib.get_transaction_details',
                 lambda _: TestReturn.details)

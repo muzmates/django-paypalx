@@ -11,6 +11,7 @@ from django.conf import settings
 from paypalx import defaults
 
 __all__ = ["conf",
+           "dyn_conf",
            "get_endpoint",
            "get_paypal_url",
            "call_api"
@@ -22,6 +23,15 @@ def conf(val):
     """
 
     return getattr(settings, val, getattr(defaults, val))
+
+def dyn_conf(var, req=None):
+    """
+    Dynamically determine variable value
+    """
+
+    val = conf(var)
+
+    return val(req) if callable(val) else val
 
 def get_endpoint():
     """
