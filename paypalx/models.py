@@ -12,6 +12,9 @@ class Transaction(models.Model):
     Payment transactions
     """
 
+    class Meta:
+        app_label = "paypalx"
+
     amount = models.DecimalField(max_digits=15, decimal_places=2,
                                  help_text=_("Payment amount"))
 
