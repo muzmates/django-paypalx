@@ -9,7 +9,6 @@ from decimal import Decimal
 from django.utils.timezone import now
 
 import lib
-import models
 import ex
 
 def init(amount, description=None, currency=None, req=None):
@@ -24,6 +23,8 @@ def init(amount, description=None, currency=None, req=None):
 
     Return paypalx.models.Transaction instance
     """
+
+    import models
 
     description = description or lib.dyn_conf("PPX_DEFAULT_DESCRIPTION", req)
     currency = currency or lib.dyn_conf("PPX_DEFAULT_CURRENCY", req)

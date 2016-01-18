@@ -4,9 +4,11 @@
 ## muzmates.com 2013
 ##
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('paypalx.views',
-    url(r'^return/$', 'return_url'),
-    url(r'^cancel/$', 'cancel_url'),
-)
+import views
+
+urlpatterns = [
+    url(r'^return/$', views.return_url),
+    url(r'^cancel/$', views.cancel_url),
+]
